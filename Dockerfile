@@ -9,8 +9,8 @@ RUN npm run build
 
 # ====== Fase 2: Servidor Nginx ======
 FROM nginx:alpine AS production-stage
-# Copiamos la configuración personalizada de Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copiamos la plantilla de Nginx para inyectar variables de entorno (Reverse Proxy)
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 # Copiamos el build generado en la fase anterior
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
