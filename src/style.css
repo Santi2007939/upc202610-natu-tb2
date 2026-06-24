@@ -1,0 +1,256 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Paleta de Colores (Provista por el usuario) */
+  --primary: #324833;        /* Dark Green */
+  --secondary: #E5DCCF;      /* Sand/Beige */
+  --background: #F1EDE7;     /* Light Cream */
+  
+  /* Colores Funcionales (Derivados) */
+  --surface: #FFFFFF;        /* Cards & Modals */
+  --text-main: #1A1A1A;      /* Dark gray for readability */
+  --text-muted: #555555;     /* Lighter gray for secondary text */
+  --danger: #D32F2F;         /* For alerts/delete */
+  --success: #2E7D32;        /* For success/upvotes */
+  --border: #DCD6CD;         /* Subtle borders based on background */
+
+  /* Tipografía */
+  --font-heading: 'Libre Caslon Text', serif;
+  --font-body: 'GT Eesti Display', 'Outfit', sans-serif;
+
+  /* Elevación y Sombras (Material 3) */
+  --shadow-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --shadow-2: 0 4px 6px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-hover: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.08);
+
+  /* Espaciado y Bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+}
+
+/* Reset Básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografía Base */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Contenedor Principal */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-container {
+  flex: 1;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Estilos de Componentes (Cards) */
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-2);
+}
+
+/* Botones Modernos */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.2rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #233424; /* Darker primary */
+  box-shadow: var(--shadow-2);
+}
+
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
+
+.btn-danger {
+  background-color: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Formularios */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--primary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  background-color: var(--surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(50, 72, 51, 0.1);
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Badges / Etiquetas */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.badge-alert {
+  background-color: rgba(211, 47, 47, 0.1);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+/* Utilidades */
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-muted {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Iconos Material */
+.material-icons {
+  vertical-align: middle;
+  line-height: 1;
+}
+.icon-sm {
+  font-size: 1.2rem;
+  margin-right: 4px;
+}
+
+/* File Upload Personalizado */
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  background-color: var(--surface);
+  border: 1px dashed var(--primary);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  width: 100%;
+  justify-content: center;
+}
+
+.custom-file-upload:hover {
+  background-color: rgba(50, 72, 51, 0.05);
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+/* Media Queries para Responsive */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .card {
+    padding: 1.2rem;
+    border-radius: var(--radius-sm);
+  }
+}
