@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: natu-frontend:latest
+    container_name: natu-frontend
+    ports:
+      - "80:80"
+    environment:
+      # Nginx alpine usa envsubst, así que necesita que le pasemos la variable al contenedor
+      - BACKEND_URL=${BACKEND_URL}
+    restart: unless-stopped
