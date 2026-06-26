@@ -47,7 +47,19 @@ const router = createRouter({
   ]
 });
 
-// Navigation guard to check if user is authenticated (can be expanded later)
-// router.beforeEach((to, from, next) => { ... });
+// Guardián de navegación: Bloquear rutas privadas si no hay sesión
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/register', '/not-found'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem('token'); // Verificamos directamente el token en LocalStorage
+
+  if (authRequired && !loggedIn) {
+    // Si la ruta requiere autenticación y no hay token, redirigir a Login
+    return next('/login');
+  }
+
+  // De lo contrario, permitir el paso
+  next();
+});
 
 export default router;
