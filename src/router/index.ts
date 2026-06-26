@@ -48,7 +48,7 @@ const router = createRouter({
 });
 
 // Guardián de navegación: Bloquear rutas privadas si no hay sesión
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const publicPages = ['/login', '/register', '/not-found'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('token'); // Verificamos directamente el token en LocalStorage
