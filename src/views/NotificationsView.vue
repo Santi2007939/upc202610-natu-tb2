@@ -1,7 +1,7 @@
 <template>
   <div class="notifications-container">
-    <div class="flex-between" style="margin-bottom: 1.5rem;">
-      <h1>Notificaciones (RF-19)</h1>
+    <div class="flex-between" style="margin-bottom: 2rem;">
+      <h1>Notificaciones</h1>
     </div>
 
     <div v-if="loading" class="text-center text-muted" style="padding: 3rem;">
