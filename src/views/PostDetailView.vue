@@ -159,6 +159,11 @@ function onFileChange(e: any) {
 
 // Inicializar la grabación desde el micrófono del usuario
 async function startRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert("Tu navegador ha bloqueado el acceso al micrófono porque la conexión no es segura (HTTP). Para grabar audio, la aplicación debe servirse mediante HTTPS o accederse desde 'localhost'.");
+    return;
+  }
+  
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     mediaRecorder.value = new MediaRecorder(stream);

@@ -10,8 +10,42 @@
     </div>
     
     <div class="search-bar card">
-      <input class="form-input" v-model="searchQuery" placeholder="Buscar por marca o ingredientes..." @keyup.enter="searchProducts" />
-      <button class="btn btn-primary" @click="searchProducts" style="margin-top: 10px;">Buscar Productos</button>
+      <div style="display: flex; gap: 0.5rem; width: 100%;">
+        <input class="form-input" v-model="searchQuery" placeholder="Buscar productos por marca o ingredientes..." @keyup.enter="searchProducts" style="flex: 1;" />
+        <button class="btn btn-primary" @click="searchProducts">
+          <span class="material-icons icon-sm">search</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Resultados de Búsqueda de Productos -->
+    <div v-if="searchResults.length > 0" class="search-results-section">
+      <div class="flex-between" style="margin-bottom: 1rem;">
+        <h3 style="margin: 0; display: flex; align-items: center; gap: 0.5rem;"><span class="material-icons">inventory_2</span> Productos Encontrados ({{ searchResults.length }})</h3>
+        <button @click="clearSearch" class="btn btn-sm btn-secondary">Limpiar</button>
+      </div>
+      
+      <div class="products-grid">
+        <div v-for="prod in searchResults" :key="prod._id" class="card product-card">
+          <h4 style="margin: 0 0 0.3rem 0; color: var(--primary);">{{ prod.name }}</h4>
+          <p class="text-muted" style="margin: 0 0 1rem 0; font-size: 0.9rem;">Marca: {{ prod.brand }}</p>
+          
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <span v-for="cert in prod.certifications" :key="cert" class="badge" style="background: var(--secondary); color: white; font-size: 0.75rem;">
+              {{ cert }}
+            </span>
+          </div>
+
+          <div class="compliance-status" :class="prod.eu_compliance_status === 'Approved' ? 'status-ok' : (prod.eu_compliance_status === 'Rejected' ? 'status-bad' : 'status-pending')">
+            <span class="material-icons icon-sm">
+              {{ prod.eu_compliance_status === 'Approved' ? 'verified' : (prod.eu_compliance_status === 'Rejected' ? 'gavel' : 'help_outline') }}
+            </span>
+            {{ prod.eu_compliance_status === 'Approved' ? 'Cumple UE' : (prod.eu_compliance_status === 'Rejected' ? 'No Cumple UE' : 'Sin evaluar') }}
+          </div>
+        </div>
+      </div>
+      
+      <hr style="margin: 2rem 0; border: none; border-top: 2px dashed var(--border);" />
     </div>
     
     <div v-if="loading" class="text-center" style="padding: 2rem;">
@@ -71,6 +105,7 @@ import { useAuthStore } from '../stores/auth';
 
 const authStore = useAuthStore();
 const posts = ref<any[]>([]);
+const searchResults = ref<any[]>([]);
 const loading = ref(true);
 const searchQuery = ref('');
 const toastMessage = ref('');
@@ -93,14 +128,31 @@ async function loadFeed() {
 }
 
 async function searchProducts() {
-  if (!searchQuery.value) return loadFeed();
+  if (!searchQuery.value) {
+    clearSearch();
+    return;
+  }
+  
+  loading.value = true;
   try {
     const res = await api.get(`/products/search?q=${searchQuery.value}`);
-    console.log('Resultados de productos:', res.data);
-    alert('Busqueda realizada. Revisar consola para productos. (En integración total esto filtraría el feed)');
+    searchResults.value = res.data;
+    
+    if (searchResults.value.length === 0) {
+      showToast('No se encontraron productos con esa búsqueda.');
+    }
   } catch (e) {
     console.error(e);
+    showToast('Error al buscar productos.');
+  } finally {
+    loading.value = false;
   }
+}
+
+function clearSearch() {
+  searchQuery.value = '';
+  searchResults.value = [];
+  loadFeed();
 }
 
 async function vote(postId: string, type: string) {
@@ -131,10 +183,37 @@ onMounted(() => {
 }
 
 .search-bar {
+  padding: 1rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.product-card {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  justify-content: space-between;
+  border-left: 4px solid var(--primary);
+  padding: 1.2rem;
 }
+
+.compliance-status {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  width: fit-content;
+}
+
+.status-ok { background-color: rgba(76, 175, 80, 0.1); color: #2e7d32; }
+.status-bad { background-color: rgba(244, 67, 54, 0.1); color: #c62828; }
+.status-pending { background-color: rgba(158, 158, 158, 0.1); color: #616161; }
 
 .post-card {
   display: flex;
